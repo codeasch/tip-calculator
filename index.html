@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tip Calculator</title>
+  <title>Insane Tip Calculator</title>
   <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap"
     rel="stylesheet"
   />
   <style>
-    /* Global Styles */
+    /* Global Reset & Base Styles */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -18,162 +18,244 @@
     }
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #71b7e6, #9b59b6);
+      /* Animated neon gradient background */
+      background: linear-gradient(270deg, #ff6b6b, #fbc531, #4cd137, #00a8ff);
+      background-size: 800% 800%;
+      animation: gradientBG 20s ease infinite;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 20px;
+      position: relative;
+      overflow: hidden;
     }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Confetti Container (for explosive effects) */
+    #confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
     /* Calculator Container */
     .calculator {
-      background: #fff;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 40px;
       width: 100%;
-      max-width: 400px;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 0.5s ease-in-out;
+      max-width: 450px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 2;
+      animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes popIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      80% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); }
     }
     .calculator h1 {
       text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.8rem;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
       color: #333;
+      letter-spacing: 2px;
     }
+
     /* Input Groups */
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     .input-group label {
       display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
       color: #555;
     }
     .input-group input[type="number"] {
       width: 100%;
-      padding: 12px;
+      padding: 15px;
+      font-size: 1.1rem;
       border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: border-color 0.3s;
+      border-radius: 10px;
+      transition: border-color 0.3s, transform 0.3s;
     }
     .input-group input[type="number"]:focus {
+      border-color: #00a8ff;
+      transform: scale(1.02);
       outline: none;
-      border-color: #9b59b6;
     }
-    /* Range Slider Styles */
+
+    /* Range Slider */
     .range-container {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .range-container input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 6px;
-      background: #ddd;
-      border-radius: 5px;
-      outline: none;
-      margin: 0 10px;
-    }
-    /* Slider Track */
-    .range-container input[type="range"]::-webkit-slider-runnable-track {
-      height: 6px;
-      background: #ddd;
-      border-radius: 5px;
-    }
-    .range-container input[type="range"]::-moz-range-track {
-      height: 6px;
-      background: #ddd;
-      border-radius: 5px;
-    }
-    /* Slider Thumb */
-    .range-container input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #9b59b6;
-      cursor: pointer;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease;
-      margin-top: -7px;
-    }
-    .range-container input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #9b59b6;
-      cursor: pointer;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease;
-    }
-    .range-container input[type="range"]::-webkit-slider-thumb:hover,
-    .range-container input[type="range"]::-moz-range-thumb:hover {
-      transform: scale(1.1);
     }
     .range-label {
       font-size: 1rem;
       color: #555;
+      width: 40px;
+      text-align: center;
     }
+    .range-container input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #ddd;
+      outline: none;
+      margin: 0 10px;
+    }
+    .range-container input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #00a8ff;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+      margin-top: -10px;
+    }
+    .range-container input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+    .range-container input[type="range"]::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #00a8ff;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+    }
+    .range-container input[type="range"]::-moz-range-thumb:hover {
+      transform: scale(1.2);
+    }
+
     /* Calculate Button */
     button {
       width: 100%;
-      padding: 12px;
-      background: #9b59b6;
+      padding: 15px;
+      font-size: 1.2rem;
+      background: #4cd137;
       color: #fff;
-      font-size: 1rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
     }
     button:hover {
-      background: #8e44ad;
+      background: #44bd32;
+      transform: scale(1.03);
     }
+    button:active {
+      transform: scale(0.98);
+    }
+    /* Button ripple effect */
+    button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+    }
+    button:active::after {
+      width: 200px;
+      height: 200px;
+      opacity: 0;
+      transition: 0s;
+    }
+
     /* Result Box */
     .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f7f7f7;
-      border-radius: 8px;
-      font-size: 1rem;
+      margin-top: 30px;
+      padding: 20px;
+      background: #f1f2f6;
+      border-radius: 15px;
+      font-size: 1.2rem;
       color: #333;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .result.show {
+      opacity: 1;
+      transform: translateY(0);
     }
     .result div {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
     .result div:last-child {
       margin-bottom: 0;
     }
+
+    /* Confetti Styles */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 20px;
+      background-color: red;
+      opacity: 0.9;
+      transform: rotate(0deg);
+      animation: confettiFall 3s linear forwards;
+    }
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
     /* Responsive Adjustments */
     @media (max-width: 480px) {
       .calculator {
-        padding: 20px;
+        padding: 30px 20px;
+      }
+      .calculator h1 {
+        font-size: 2rem;
+      }
+      .input-group input[type="number"] {
+        font-size: 1rem;
+      }
+      button {
+        font-size: 1rem;
+      }
+      .result {
+        font-size: 1rem;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Confetti Container -->
+  <div id="confetti-container"></div>
+  
+  <!-- Calculator Container -->
   <div class="calculator">
     <h1>Tip Calculator</h1>
 
@@ -189,9 +271,9 @@
     </div>
 
     <div class="input-group">
-      <label for="tip"
-        >Tip Percentage <span id="tip-percentage-display">15%</span></label
-      >
+      <label for="tip">
+        Tip Percentage <span id="tip-percentage-display">15%</span>
+      </label>
       <div class="range-container">
         <span class="range-label">0%</span>
         <input type="range" id="tip" min="0" max="100" value="15" />
@@ -212,7 +294,7 @@
 
     <button id="calculate">Calculate</button>
 
-    <div class="result">
+    <div class="result" id="result">
       <div>
         <span>Tip Amount</span>
         <span id="tip-amount">$0.00</span>
@@ -228,10 +310,40 @@
     </div>
   </div>
 
+  <!-- JavaScript -->
   <script>
     // Helper function to format numbers as currency
     function formatCurrency(num) {
       return '$' + num.toFixed(2);
+    }
+
+    // Launch confetti for a super-insane effect!
+    function launchConfetti() {
+      const confettiCount = 100;
+      const confettiContainer = document.getElementById('confetti-container');
+      for (let i = 0; i < confettiCount; i++) {
+        let confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        // Random color from an array of vibrant colors
+        const colors = ['#ff4757', '#ff6b81', '#ffa502', '#2ed573', '#1e90ff', '#3742fa', '#ff6348'];
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        // Position the confetti randomly across the viewport width
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = '-20px';
+        // Random size for each confetti piece
+        let size = Math.random() * 10 + 5;
+        confetti.style.width = size + 'px';
+        confetti.style.height = size * 2 + 'px';
+        // Randomize animation delay for a more natural effect
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        // Random initial rotation
+        confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+        confettiContainer.appendChild(confetti);
+        // Remove the confetti element after the animation ends
+        setTimeout(() => {
+          confetti.remove();
+        }, 3000);
+      }
     }
 
     // Main calculation function
@@ -240,7 +352,6 @@
       const tipPercent = parseFloat(document.getElementById('tip').value);
       const people = parseInt(document.getElementById('people').value, 10);
 
-      // Validate input values
       if (isNaN(bill) || bill <= 0) {
         alert('Please enter a valid bill amount.');
         return;
@@ -255,18 +366,25 @@
       const totalAmount = bill + tipAmount;
       const perPerson = totalAmount / people;
 
-      // Update UI with the results
+      // Update the UI with formatted results
       document.getElementById('tip-amount').innerText = formatCurrency(tipAmount);
       document.getElementById('total-amount').innerText = formatCurrency(totalAmount);
       document.getElementById('per-person').innerText = formatCurrency(perPerson);
+
+      // Animate the result box in
+      const resultDiv = document.getElementById('result');
+      resultDiv.classList.add('show');
+
+      // Fire off a confetti blast!
+      launchConfetti();
     }
 
-    // Update tip percentage display when slider is moved
+    // Update tip percentage display in real time
     document.getElementById('tip').addEventListener('input', function () {
       document.getElementById('tip-percentage-display').innerText = this.value + '%';
     });
 
-    // Add event listener to the calculate button
+    // Set up the calculate button event listener
     document.getElementById('calculate').addEventListener('click', calculateTip);
   </script>
 </body>
