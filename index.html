@@ -5,148 +5,209 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tip Calculator</title>
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap"
+    rel="stylesheet"
+  />
   <style>
-    /* Reset and basic styling */
+    /* Global Styles */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
     body {
-      font-family: 'Roboto', sans-serif;
-      background: #f0f4f8;
-      color: #333;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #71b7e6, #9b59b6);
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       min-height: 100vh;
       padding: 20px;
     }
-
-    /* Container styling */
-    .container {
+    /* Calculator Container */
+    .calculator {
+      background: #fff;
       width: 100%;
       max-width: 400px;
-      background: #fff;
-      padding: 25px 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in-out;
     }
-
-    h1 {
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .calculator h1 {
       text-align: center;
-      margin-bottom: 25px;
-      font-weight: 700;
-      color: #4caf50;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: #333;
     }
-
-    /* Input group styling */
+    /* Input Groups */
     .input-group {
       margin-bottom: 20px;
     }
-
     .input-group label {
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
+      color: #555;
     }
-
-    .input-group input[type="number"],
-    .input-group input[type="range"] {
+    .input-group input[type="number"] {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
     }
-
-    /* Custom range styling */
-    input[type="range"] {
+    .input-group input[type="number"]:focus {
+      outline: none;
+      border-color: #9b59b6;
+    }
+    /* Range Slider Styles */
+    .range-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .range-container input[type="range"] {
       -webkit-appearance: none;
-      height: 5px;
+      appearance: none;
+      width: 100%;
+      height: 6px;
       background: #ddd;
       border-radius: 5px;
       outline: none;
+      margin: 0 10px;
     }
-    input[type="range"]::-webkit-slider-thumb {
+    /* Slider Track */
+    .range-container input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      background: #ddd;
+      border-radius: 5px;
+    }
+    .range-container input[type="range"]::-moz-range-track {
+      height: 6px;
+      background: #ddd;
+      border-radius: 5px;
+    }
+    /* Slider Thumb */
+    .range-container input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
+      appearance: none;
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: #4caf50;
+      background: #9b59b6;
       cursor: pointer;
-      margin-top: -8px;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease;
+      margin-top: -7px;
     }
-    input[type="range"]::-moz-range-thumb {
+    .range-container input[type="range"]::-moz-range-thumb {
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: #4caf50;
+      background: #9b59b6;
       cursor: pointer;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease;
     }
-
-    /* Button styling */
+    .range-container input[type="range"]::-webkit-slider-thumb:hover,
+    .range-container input[type="range"]::-moz-range-thumb:hover {
+      transform: scale(1.1);
+    }
+    .range-label {
+      font-size: 1rem;
+      color: #555;
+    }
+    /* Calculate Button */
     button {
       width: 100%;
       padding: 12px;
-      background: #4caf50;
+      background: #9b59b6;
       color: #fff;
+      font-size: 1rem;
       border: none;
-      border-radius: 4px;
-      font-size: 16px;
+      border-radius: 8px;
       cursor: pointer;
       transition: background 0.3s;
     }
     button:hover {
-      background: #43a047;
+      background: #8e44ad;
     }
-
-    /* Result box styling */
+    /* Result Box */
     .result {
-      margin-top: 25px;
-      background: #f9f9f9;
+      margin-top: 20px;
       padding: 15px;
-      border-radius: 4px;
+      background: #f7f7f7;
+      border-radius: 8px;
+      font-size: 1rem;
+      color: #333;
     }
     .result div {
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;
-      font-size: 16px;
     }
     .result div:last-child {
       margin-bottom: 0;
     }
-
-    /* Responsive adjustments */
+    /* Responsive Adjustments */
     @media (max-width: 480px) {
-      .container {
-        padding: 20px 15px;
+      .calculator {
+        padding: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="calculator">
     <h1>Tip Calculator</h1>
 
     <div class="input-group">
       <label for="bill">Bill Amount</label>
-      <input type="number" id="bill" placeholder="Enter bill amount" min="0" step="0.01" />
+      <input
+        type="number"
+        id="bill"
+        placeholder="Enter bill amount"
+        min="0"
+        step="0.01"
+      />
     </div>
 
     <div class="input-group">
-      <label for="tip">
-        Tip Percentage <span id="tip-percentage-display">15%</span>
-      </label>
-      <input type="range" id="tip" min="0" max="100" value="15" />
+      <label for="tip"
+        >Tip Percentage <span id="tip-percentage-display">15%</span></label
+      >
+      <div class="range-container">
+        <span class="range-label">0%</span>
+        <input type="range" id="tip" min="0" max="100" value="15" />
+        <span class="range-label">100%</span>
+      </div>
     </div>
 
     <div class="input-group">
       <label for="people">Number of People</label>
-      <input type="number" id="people" placeholder="Enter number of people" min="1" value="1" />
+      <input
+        type="number"
+        id="people"
+        placeholder="Enter number of people"
+        min="1"
+        value="1"
+      />
     </div>
 
     <button id="calculate">Calculate</button>
@@ -201,7 +262,7 @@
     }
 
     // Update tip percentage display when slider is moved
-    document.getElementById('tip').addEventListener('input', function() {
+    document.getElementById('tip').addEventListener('input', function () {
       document.getElementById('tip-percentage-display').innerText = this.value + '%';
     });
 
